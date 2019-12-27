@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/jesusantguerrero/beeblog/post/models"
 	"github.com/labstack/echo"
@@ -13,7 +14,12 @@ var posts []*models.Post
 func Routes(api *echo.Echo) *echo.Echo {
 
 	api.Add("GET", "/api/v1/posts", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, posts)
+		return c.JSON(http.StatusOK, models.Get())
+	})
+
+	api.Add("GET", "/api/v1/posts/:id", func(c echo.Context) error {
+		id, _ := strconv.Atoi(c.Param("id"))
+		return c.JSON(http.StatusOK, models.GetOne(id))
 	})
 
 	api.Add("POST", "/api/v1/posts", func(c echo.Context) error {
@@ -21,9 +27,8 @@ func Routes(api *echo.Echo) *echo.Echo {
 		if err := c.Bind(post); err != nil {
 			return err
 		}
-		post.ID = index
-		index++
-		posts = append(posts, post)
+
+		models.Save(post)
 		return c.JSON(http.StatusCreated, post)
 	})
 
@@ -31,7 +36,8 @@ func Routes(api *echo.Echo) *echo.Echo {
 		return c.String(http.StatusOK, "post deleted")
 	})
 
-	api.Add("PUT", "/api/v1/posts", func(c echo.Context) error {
+	api.Add("PUT", "/api/v1/posts/:id", func(c echo.Context) error {
+		// id, _ := strconv.Atoi(c.Param("id"))
 		return c.String(http.StatusOK, "post updated")
 	})
 

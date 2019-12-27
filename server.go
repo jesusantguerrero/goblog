@@ -17,7 +17,8 @@ func main() {
 		return c.String(http.StatusOK, "this is the status page")
 	})
 
+	// api.Use(middleware.Logger())
+	// api.Use(middleware.Recover())
 	controllers.Routes(api)
-
 	api.Logger.Fatal(api.Start(":1323"))
 }
