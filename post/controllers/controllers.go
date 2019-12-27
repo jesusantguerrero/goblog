@@ -8,9 +8,6 @@ import (
 	"github.com/labstack/echo"
 )
 
-var index = 1
-var posts []*models.Post
-
 func Routes(api *echo.Echo) *echo.Echo {
 
 	api.Add("GET", "/api/v1/posts", func(c echo.Context) error {
@@ -32,13 +29,19 @@ func Routes(api *echo.Echo) *echo.Echo {
 		return c.JSON(http.StatusCreated, post)
 	})
 
-	api.Add("DELETE", "/api/v1/posts", func(c echo.Context) error {
+	api.Add("DELETE", "/api/v1/posts/:id", func(c echo.Context) error {
+		id, _ := strconv.Atoi(c.Param("id"))
+		models.Delete(id)
 		return c.String(http.StatusOK, "post deleted")
 	})
 
 	api.Add("PUT", "/api/v1/posts/:id", func(c echo.Context) error {
-		// id, _ := strconv.Atoi(c.Param("id"))
-		return c.String(http.StatusOK, "post updated")
+		post := &models.Post{}
+		if err := c.Bind(post); err != nil {
+			return err
+		}
+		id, _ := strconv.Atoi(c.Param("id"))
+		return c.JSON(http.StatusOK, models.Update(post, id))
 	})
 
 	return api

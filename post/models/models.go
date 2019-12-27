@@ -15,7 +15,7 @@ type Post struct {
 	Content string `json:"content" db:"content"`
 }
 
-var updatedFields = []string{"title, content"}
+var updatedFields = []string{"title", "content"}
 
 var schema = `
 CREATE TABLE posts IF NOT EXISTS (
@@ -29,10 +29,20 @@ var db *sqlx.DB
 
 // GetPosts : Get all the posts from database
 
+func connect() *sqlx.DB {
+	db, err := sqlx.Connect("mysql", "root@(localhost:3307)/test")
+	if err != nil {
+		log.Panic(err)
+	}
+
+	return db
+}
+
 func Get() []Post {
 	db = connect()
 	posts := []Post{}
 	db.Select(&posts, "select * from posts")
+	db.Close()
 	return posts
 }
 
@@ -40,6 +50,7 @@ func Save(post *Post) *Post {
 	db = connect()
 	sql := "insert into posts(" + strings.Join(updatedFields, ", :") + ") VALUES (" + strings.Join(updatedFields, ", :") + ")"
 	db.NamedExec(sql, post)
+	db.Close()
 	return post
 }
 
@@ -50,27 +61,30 @@ func GetOne(id int) *Post {
 	if err != nil {
 		log.Panic(err)
 	}
+	db.Close()
 	return post
 }
 
-func update(post *Post, id int) *Post {
+func Update(post *Post, id int) *Post {
 	db = connect()
 	var toUpdate []string
 
 	for index := 0; index < len(updatedFields); index++ {
-		toUpdate = append(toUpdate, updatedFields[index]+"=:"+updatedFields[index])
+		fields := updatedFields[index] + "=:" + updatedFields[index]
+		toUpdate = append(toUpdate, fields)
 	}
 	idString := strconv.Itoa(id)
-	sql := "update  set " + strings.Join(updatedFields, ", ") + " where id=" + idString
-	db.NamedExec(sql, post)
+	sql := "UPDATE posts SET " + strings.Join(toUpdate, ", ") + " WHERE id=" + idString
+	_, err := db.NamedExec(sql, post)
+	if err != nil {
+		panic(err)
+	}
 	return post
 }
 
-func connect() *sqlx.DB {
-	db, err := sqlx.Connect("mysql", "root@(localhost:3307)/test")
-	if err != nil {
-		log.Panic(err)
-	}
-
-	return db
+func Delete(id int) {
+	db = connect()
+	sql := "DELETE FROM posts WHERE id=?"
+	db.MustExec(sql, id)
+	db.Close()
 }
