@@ -48,10 +48,14 @@ func Get() []Post {
 
 func Save(post *Post) *Post {
 	db = connect()
-	sql := "insert into posts(" + strings.Join(updatedFields, ", :") + ") VALUES (" + strings.Join(updatedFields, ", :") + ")"
-	db.NamedExec(sql, post)
+	sql := "insert into posts(" + strings.Join(updatedFields, ",") + ") VALUES (:" + strings.Join(updatedFields, ", :") + ")"
+	result, err := db.NamedExec(sql, post)
+	handleError(err)
+	lastId, _ := result.LastInsertId()
 	db.Close()
-	return post
+	lastIdInt := int(lastId)
+	newResource := GetOne(lastIdInt)
+	return newResource
 }
 
 func GetOne(id int) *Post {
@@ -87,4 +91,10 @@ func Delete(id int) {
 	sql := "DELETE FROM posts WHERE id=?"
 	db.MustExec(sql, id)
 	db.Close()
+}
+
+func handleError(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
