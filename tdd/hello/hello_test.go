@@ -20,7 +20,7 @@ func TestGreet(t *testing.T) {
 
 	t.Run("Say bot name and ask for username when name is not provided", func(t *testing.T) {
 		got := Greet("")
-		want := "Hello my name is botcito. Can I know your name?"
+		want := "Hi, my name is botcito.Can I know your name?"
 
 		assertMessage(t, got, want)
 	})
