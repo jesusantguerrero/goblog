@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/jesusantguerrero/beeblog/post/controllers"
 	"github.com/labstack/echo"
@@ -17,8 +18,10 @@ func main() {
 		return c.String(http.StatusOK, "this is the status page")
 	})
 
+	port := os.Getenv("PORT")
+
 	// api.Use(middleware.Logger())
 	// api.Use(middleware.Recover())
 	controllers.Routes(api)
-	api.Logger.Fatal(api.Start(":1323"))
+	api.Logger.Fatal(api.Start(":" + port))
 }
