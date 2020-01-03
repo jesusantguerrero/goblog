@@ -37,13 +37,13 @@ func GetResource(c echo.Context) error {
 }
 
 func CreateResource(c echo.Context) error {
-	post := &models.Post{}
+	post := &models.Comment{}
 	if err := c.Bind(post); err != nil {
 		return err
 	}
 
-	model.Save(post)
-	return c.JSON(http.StatusCreated, post)
+	newComment := model.Save(post)
+	return c.JSON(http.StatusCreated, newComment)
 }
 
 func DeleteResource(c echo.Context) error {
@@ -53,7 +53,7 @@ func DeleteResource(c echo.Context) error {
 }
 
 func UpdateResource(c echo.Context) error {
-	post := &models.Post{}
+	post := &models.Comment{}
 	if err := c.Bind(post); err != nil {
 		return err
 	}

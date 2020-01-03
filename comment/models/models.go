@@ -1,35 +1,27 @@
 package models
 
 import (
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/jesusantguerrero/goblog/core/models"
 )
 
-// Post a type
-type Post struct {
-	ID      int    `json:"id" db:"id"`
-	Title   string `json:"title" db:"title"`
-	Content string `json:"content" db:"content"`
+// Comment a type
+type Comment struct {
+	ID       int    `json:"id" db:"id"`
+	UserID   string `json:"user_id" db:"user_id"`
+	PostID   string `json:"post_id" db:"post_id"`
+	Content  string `json:"content" db:"content"`
+	EditMode bool   `json:"edit_mode" db:"edit_mode"`
 }
 
-type CommentModel struct {
-	models.Model
-}
-
-var updatedFields = []string{"title", "content"}
-
-var schema = `
-CREATE TABLE posts IF NOT EXISTS (
-	id int autoincrement,
-	title varchar(100),
-	content text
-)
-`
+var updatedFields = []string{"user_id", "post_id", "content", "edit_mode"}
 
 // NewModel create new Instance of model
 func NewModel() *models.Model {
 	model := models.NewModel()
-	posts := []Post{}
-	model.SetList(&posts)
+	comments := []Comment{}
+	model.SetList(&comments)
+	model.SetResourceName("comments")
+	model.SetUpdateFields(updatedFields)
+	model.SetResource(&Comment{})
 	return model
 }
