@@ -31,6 +31,9 @@ func TestGetPosts(t *testing.T) {
 	c := e.NewContext(req, rec)
 	c.SetPath("/api/v1/posts")
 
+	ctrl := Controller{}
+	ctrl.Boot()
+
 	if assert.NoError(t, GetResources(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 	}

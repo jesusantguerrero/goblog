@@ -4,8 +4,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/jesusantguerrero/beeblog/post/controllers"
+	"github.com/jesusantguerrero/goblog/post/controllers"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 func main() {
@@ -18,10 +19,17 @@ func main() {
 		return c.String(http.StatusOK, "this is the status page")
 	})
 
-	port := os.Getenv("PORT")
+	api.POST("/api/v1/testpost", func(c echo.Context) error {
+		return c.String(http.StatusOK, "This is the post")
+	})
 
-	// api.Use(middleware.Logger())
-	// api.Use(middleware.Recover())
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "1323"
+	}
+
+	api.Use(middleware.Logger())
+	api.Use(middleware.Recover())
 	controllers.Routes(api)
 	api.Logger.Fatal(api.Start(":" + port))
 }

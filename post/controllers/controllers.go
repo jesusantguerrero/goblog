@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/jesusantguerrero/beeblog/post/models"
+	"github.com/jesusantguerrero/goblog/post/models"
 	"github.com/labstack/echo"
 )
 
