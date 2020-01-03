@@ -30,7 +30,7 @@ var db *sqlx.DB
 // GetPosts : Get all the posts from database
 
 func connect() *sqlx.DB {
-	db, err := sqlx.Connect("mysql", "root@(localhost:3307)/test")
+	db, err := sqlx.Connect("mysql", "root@(localhost:3306)/test")
 	if err != nil {
 		log.Panic(err)
 	}

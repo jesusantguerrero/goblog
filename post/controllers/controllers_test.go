@@ -6,13 +6,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/labstack/echo"
+	"github.com/stretchr/testify/assert"
 )
 
 var postJSON = `{
-	"title": "The post",
+	"title": "The post2",
 	"content": "this is a really long post"
 }`
 

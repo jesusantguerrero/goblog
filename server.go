@@ -3,7 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/jesusantguerrero/beeblog/post/controllers"
+	commentcontroller "github.com/jesusantguerrero/goblog/comment/controller"
+	"github.com/jesusantguerrero/goblog/post/controllers"
 	"github.com/labstack/echo"
 )
 
@@ -20,5 +21,6 @@ func main() {
 	// api.Use(middleware.Logger())
 	// api.Use(middleware.Recover())
 	controllers.Routes(api)
+	commentcontroller.Routes(api)
 	api.Logger.Fatal(api.Start(":1323"))
 }
