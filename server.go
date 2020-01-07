@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"os"
 
+	commentcontroller "github.com/jesusantguerrero/goblog/comment/controller"
 	"github.com/jesusantguerrero/goblog/post/controllers"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 )
 
 func main() {
@@ -28,8 +28,10 @@ func main() {
 		port = "1323"
 	}
 
-	api.Use(middleware.Logger())
-	api.Use(middleware.Recover())
+	// api.Use(middleware.Logger())
+	// api.Use(middleware.Recover())
 	controllers.Routes(api)
+	ctrl := commentcontroller.Controller{}
+	ctrl.SuperBoot(api)
 	api.Logger.Fatal(api.Start(":" + port))
 }

@@ -1,9 +1,7 @@
 package models
 
 import (
-	"fmt"
 	"log"
-	"reflect"
 	"strconv"
 	"strings"
 
@@ -53,11 +51,11 @@ func (m *Model) Connect() {
 // Get get list of resource from db
 func (m Model) Get() interface{} {
 	m.Connect()
-	fmt.Println(reflect.TypeOf(m.List))
-	err := m.DB.Select(m.List, "select * from "+m.resourceName)
+	list := m.List
+	err := m.DB.Select(list, "select * from "+m.resourceName)
 	handleError(err)
 	m.DB.Close()
-	return m.List
+	return list
 }
 
 // Save - seve the list

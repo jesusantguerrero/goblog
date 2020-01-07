@@ -36,7 +36,7 @@ func TestGetComments(t *testing.T) {
 	c.SetPath("/api/v1/comments")
 
 	ctrl := Controller{}
-	ctrl._Boot(e)
+	ctrl.SuperBoot(e)
 
 	if assert.NoError(t, ctrl.GetResources(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
@@ -56,7 +56,7 @@ func TestGetComment(t *testing.T) {
 	c.SetParamNames("id")
 	c.SetParamValues("1")
 	ctrl := Controller{}
-	ctrl._Boot(e)
+	ctrl.SuperBoot(e)
 
 	if assert.NoError(t, ctrl.GetResource(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
@@ -71,7 +71,7 @@ func TestCreateComment(t *testing.T) {
 	c := e.NewContext(req, rec)
 	c.SetPath("/api/v1/comments")
 	ctrl := Controller{}
-	ctrl._Boot(e)
+	ctrl.SuperBoot(e)
 
 	if assert.NoError(t, ctrl.CreateResource(c)) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
@@ -89,7 +89,7 @@ func TestUpdateComment(t *testing.T) {
 	c.SetPath("id")
 	c.SetParamValues("1")
 	ctrl := Controller{}
-	ctrl._Boot(e)
+	ctrl.SuperBoot(e)
 
 	if assert.NoError(t, ctrl.UpdateResource(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)

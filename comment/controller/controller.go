@@ -12,6 +12,6 @@ type Controller struct {
 	BaseController.Controller
 }
 
-func (c *Controller) _Boot(api *echo.Echo) {
+func (c *Controller) SuperBoot(api *echo.Echo) {
 	c.Boot(api, model, "comments")
 }
