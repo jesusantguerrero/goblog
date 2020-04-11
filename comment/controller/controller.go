@@ -12,6 +12,7 @@ type Controller struct {
 	BaseController.Controller
 }
 
-func (c *Controller) SuperBoot(api *echo.Echo) {
+// LocalBoot boot the controller
+func (c *Controller) LocalBoot(api *echo.Echo) {
 	c.Boot(api, model, "comments")
 }

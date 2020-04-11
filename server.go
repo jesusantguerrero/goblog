@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	commentcontroller "github.com/jesusantguerrero/goblog/comment/controller"
+	Comment "github.com/jesusantguerrero/goblog/comment/controller"
 	"github.com/jesusantguerrero/goblog/post/controllers"
 	"github.com/labstack/echo"
 )
@@ -19,10 +19,6 @@ func main() {
 		return c.String(http.StatusOK, "this is the status page")
 	})
 
-	api.POST("/api/v1/testpost", func(c echo.Context) error {
-		return c.String(http.StatusOK, "This is the post")
-	})
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "1323"
@@ -31,7 +27,7 @@ func main() {
 	// api.Use(middleware.Logger())
 	// api.Use(middleware.Recover())
 	controllers.Routes(api)
-	ctrl := commentcontroller.Controller{}
-	ctrl.SuperBoot(api)
+	CommentController := Comment.Controller{}
+	CommentController.LocalBoot(api)
 	api.Logger.Fatal(api.Start(":" + port))
 }
