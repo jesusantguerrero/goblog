@@ -20,7 +20,6 @@ type Model struct {
 	schema        string
 	updatedFields []string
 	List          interface{}
-	SchemaType    reflect.Type
 	DB            *sqlx.DB
 	// getNewList()
 }
