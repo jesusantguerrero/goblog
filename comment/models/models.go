@@ -1,11 +1,11 @@
 package models
 
 import (
-	"github.com/jesusantguerrero/goblog/core/models"
+	BaseModel "github.com/jesusantguerrero/goblog/core/models"
 )
 
-// Comment a type
-type Comment struct {
+// Data - Types of the vaina
+type Data struct {
 	ID       int    `json:"id" db:"id"`
 	UserID   int    `json:"user_id" db:"user_id"`
 	PostID   int    `json:"post_id" db:"post_id"`
@@ -16,12 +16,22 @@ type Comment struct {
 var updatedFields = []string{"user_id", "post_id", "content", "edit_mode"}
 
 // NewModel create new Instance of model
-func NewModel() *models.Model {
-	model := models.NewModel()
-	comments := []Comment{}
+func NewModel() *BaseModel.Model {
+	model := BaseModel.NewModel()
+	comments := []*Data{}
+	comment := new(Data)
+	model.Storable = CommentModel{}
 	model.SetList(&comments)
 	model.SetResourceName("comments")
 	model.SetUpdateFields(updatedFields)
-	model.SetResource(&Comment{})
+	model.SetResource(comment)
 	return model
+}
+
+type CommentModel struct {
+}
+
+func (cm CommentModel) GetNewData() interface{} {
+	data := &Data{}
+	return data
 }

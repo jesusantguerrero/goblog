@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"log"
 	"reflect"
 	"strconv"
@@ -11,13 +10,20 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+type ModelBase interface {
+	GetNewData() interface{}
+}
+
 type Model struct {
+	Storable      ModelBase
 	Resource      interface{}
 	resourceName  string
 	schema        string
 	updatedFields []string
 	List          interface{}
+	SchemaType    reflect.Type
 	DB            *sqlx.DB
+	// getNewList()
 }
 
 // SetList set empty list to fill when calling Get
@@ -42,7 +48,7 @@ func (m *Model) SetUpdateFields(fields []string) {
 
 // Connect to the database
 func (m *Model) Connect() {
-	db, err := sqlx.Connect("mysql", "root@(localhost:3307)/test")
+	db, err := sqlx.Connect("mysql", "root@(localhost:3306)/test")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -53,11 +59,18 @@ func (m *Model) Connect() {
 // Get get list of resource from db
 func (m Model) Get() interface{} {
 	m.Connect()
-	fmt.Println(reflect.TypeOf(m.List))
-	err := m.DB.Select(m.List, "select * from "+m.resourceName)
+	var list []interface{}
+	rows, err := m.DB.Queryx("select * from " + m.resourceName)
+
+	for rows.Next() {
+		var resource = m.Storable.GetNewData()
+		rows.StructScan(resource)
+		list = append(list, resource)
+	}
+
 	handleError(err)
 	m.DB.Close()
-	return m.List
+	return list
 }
 
 // Save - seve the list
