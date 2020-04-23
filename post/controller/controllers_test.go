@@ -1,4 +1,4 @@
-package controllers
+package controller
 
 import (
 	"net/http"
@@ -31,7 +31,10 @@ func TestGetPosts(t *testing.T) {
 	c := e.NewContext(req, rec)
 	c.SetPath("/api/v1/posts")
 
-	if assert.NoError(t, GetResources(c)) {
+	ctrl := Controller{}
+	ctrl.LocalBoot(e)
+
+	if assert.NoError(t, ctrl.GetResources(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 	}
 
@@ -49,7 +52,10 @@ func TestGetPost(t *testing.T) {
 	c.SetParamNames("id")
 	c.SetParamValues("2")
 
-	if assert.NoError(t, GetResource(c)) {
+	ctrl := Controller{}
+	ctrl.LocalBoot(e)
+
+	if assert.NoError(t, ctrl.GetResource(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 	}
 }
@@ -62,7 +68,10 @@ func TestCreatePost(t *testing.T) {
 	c := e.NewContext(req, rec)
 	c.SetPath("/api/v1/posts")
 
-	if assert.NoError(t, CreateResource(c)) {
+	ctrl := Controller{}
+	ctrl.LocalBoot(e)
+
+	if assert.NoError(t, ctrl.CreateResource(c)) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
 		createdPostId = rec.Body.String()
 	}
@@ -78,7 +87,10 @@ func TestUpdatePost(t *testing.T) {
 	c.SetPath("id")
 	c.SetParamValues("2")
 
-	if assert.NoError(t, CreateResource(c)) {
+	ctrl := Controller{}
+	ctrl.LocalBoot(e)
+
+	if assert.NoError(t, ctrl.CreateResource(c)) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
 	}
 }

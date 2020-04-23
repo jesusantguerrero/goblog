@@ -5,7 +5,7 @@ import (
 	"os"
 
 	Comment "github.com/jesusantguerrero/goblog/comment/controller"
-	"github.com/jesusantguerrero/goblog/post/controllers"
+	Post "github.com/jesusantguerrero/goblog/post/controllers"
 	"github.com/labstack/echo"
 )
 
@@ -26,8 +26,10 @@ func main() {
 
 	// api.Use(middleware.Logger())
 	// api.Use(middleware.Recover())
-	controllers.Routes(api)
+	PostConstroller := Post.Controller{}
 	CommentController := Comment.Controller{}
+
 	CommentController.LocalBoot(api)
+	PostConstroller.LocalBoot(api)
 	api.Logger.Fatal(api.Start(":" + port))
 }
