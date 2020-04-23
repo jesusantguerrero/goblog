@@ -2,6 +2,7 @@ package models
 
 import (
 	"log"
+	"os"
 	"strconv"
 	"strings"
 
@@ -46,7 +47,7 @@ func (m *Model) SetUpdateFields(fields []string) {
 
 // Connect to the database
 func (m *Model) Connect() {
-	db, err := sqlx.Connect("mysql", "root@(localhost:3306)/test")
+	db, err := sqlx.Connect("mysql", os.Getenv("DB_CONNECTION_STRING"))
 	if err != nil {
 		log.Panic(err)
 	}
