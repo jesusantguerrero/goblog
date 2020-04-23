@@ -5,7 +5,7 @@ import (
 	"os"
 
 	Comment "github.com/jesusantguerrero/goblog/comment/controller"
-	Post "github.com/jesusantguerrero/goblog/post/controllers"
+	Post "github.com/jesusantguerrero/goblog/post/controller"
 	"github.com/labstack/echo"
 )
 
