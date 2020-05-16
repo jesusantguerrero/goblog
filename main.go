@@ -4,13 +4,19 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/joho/godotenv"
+
 	Comment "github.com/jesusantguerrero/goblog/comment/controller"
 	Post "github.com/jesusantguerrero/goblog/post/controller"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 func main() {
+	godotenv.Load()
+
 	api := echo.New()
+	api.Use(middleware.CORS())
 	api.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
@@ -24,8 +30,8 @@ func main() {
 		port = "1323"
 	}
 
-	// api.Use(middleware.Logger())
-	// api.Use(middleware.Recover())
+	api.Use(middleware.Logger())
+	api.Use(middleware.Recover())
 	PostConstroller := Post.Controller{}
 	CommentController := Comment.Controller{}
 
